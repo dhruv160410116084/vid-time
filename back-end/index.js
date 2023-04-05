@@ -1,27 +1,49 @@
-const { createServer } = require("http");
-const { Server } = require("socket.io");
 
-const httpServer = createServer();
-const io = new Server(httpServer, { cors: {
-    origin: "http://localhost:5500"
-  }});
+const io = require("socket.io")();
+
+let users = {}
 
 io.on("connection", (socket) => {
 
+  try {
+    console.log(socket.id, " connected")
+    users[socket.id] = ""
+    socket.on('user-data', (data) => {
+      users[socket.id] = data
+      io.emit('users', users)
 
-  console.log(socket.id, " connected")
+    })
 
-  socket.on('offer',(data)=>{
-    socket.broadcast.emit('offer',data)
-  })
+    socket.on('offer', (data) => {
+      socket.broadcast.emit('offer', data)
+    })
 
-  socket.on('answer',(data)=>{
-    socket.broadcast.emit('answer',data)
-  })
+    socket.on('answer', (data) => {
+      socket.broadcast.emit('answer', data)
+    })
 
-  socket.on('candidate',(data)=>{
-    socket.broadcast.emit('candidate',data)
-  })
+    socket.on('candidate', (data) => {
+      socket.broadcast.emit('candidate', data)
+    })
+
+    socket.on('get-users', async (data) => {
+
+      io.emit('users', users)
+    })
+
+    socket.on("disconnect", (reason) => {
+      // ...
+      delete users[socket.id]
+      io.emit('users',users)
+    });
+
+    socket.on('call',(id)=>{
+      console.log('call...',id)
+      io.to(id).emit('incoming-call',socket.id)
+    })
+  } catch (error) {
+    console.log(error)
+  }
 });
 
-httpServer.listen(3000);
+io.listen(3000);

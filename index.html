@@ -5,12 +5,45 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vid Chat</title>
+    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="incoming-call.css">
+
 </head>
 <body>
-    <div id="hello">Hello</div>
-    <video id="user-1" autoplay playsinline controls="false"></video>
-    <video id="user-2" autoplay playsinline controls="false"></video>
+    <div class="sidenav">
+       <strong>Users</strong> 
+        <hr class="rounded" style="margin:5px;">
 
+        <ul id="users-list">
+
+        </ul>
+    </div>
+    <div class="main">
+        <div id="intro" class="flex-container">
+            <div id="hello"> Hello,&nbsp; </div>
+            <span class="wave">  👋🏾 </span>
+             <div id="name"> &nbsp;     </div>
+        </div>
+        <div class="content-center" id="incoming-call">
+            <div class="pulse"> <i class="fas fa-phone fa-2x"></i> </div>
+            <div id="incoming-call-details"></div>
+        </div>
+        <video id="user-1" autoplay playsinline ></video>
+        <video id="user-2"  autoplay playsinline hidden style="display: none;"></video>
+        <div id="incoming-call-controls">
+           
+            <img src="./assets/icons/phone.png"class="control-container" style="background-color: green;"/>
+            <img src="assets/icons/phone.png" class="control-container" style="background-color: red; transform: rotate(116deg);"/>
+        </div>
+        <div id="controls" style="display: none;">
+            <img src="./assets/icons/camera.png" class="control-container"></img>
+            <img src="./assets/icons/mic.png"class="control-container"/>
+            <img src="assets/icons/phone.png" class="control-container" style="background-color: red;"/>
+        </div>
+       
+    </div>
+    
+   
 
 </body>
 <script src="https://cdn.socket.io/4.6.0/socket.io.min.js" integrity="sha384-c79GN5VsunZvi+Q/WObgk2in0CbZsHnjEqvFxC5DxHn9lTfNce2WW6h2pH6u/kF+" crossorigin="anonymous"></script>

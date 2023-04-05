@@ -1,0 +1,148 @@
+.sidenav {
+    height: 100%;
+    width: 15%;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0 !important;
+    background-color: #111;
+    overflow-x: hidden;
+    padding-top: 20px;
+    color: white;
+    text-align: center;
+  }
+
+  .sidenav ul {
+    list-style-type: none;
+    padding-left: 0;
+    padding-top: 0 !important;
+    background-color: #636161;
+    border-radius: 5px;
+    margin: 5px;
+  }
+
+  .sidenav li {
+    font-size: 16px;
+    color: #dfc270;
+    display: block;
+    width: 80%;
+    margin: auto;
+    padding: 10px 0px;
+    border-bottom:1px solid #928f8f;
+    cursor: pointer;
+  }
+
+  .sidenav img {
+      height: 30px;
+      width: 30px;
+      color: #dfc270;
+  }
+  .sidenav li:last-child {
+    border-bottom: none
+  }
+  
+  .sidenav li:hover {
+    color: #f1f1f1;
+    background-color: rgb(124, 162, 162);
+  }
+
+  .main {
+    margin-left: 15%; /* Same as the width of the sidenav */
+    font-size: 28px; /* Increased text to enable scrolling */
+    margin-top: 0 !important;
+   
+    /* padding: 0px 10px; */
+  }
+
+  .flex-container {
+    display: flex;
+  }
+
+  .wave {
+    animation-name: wave-animation;  /* Refers to the name of your @keyframes element below */
+    animation-duration: 2.5s;        /* Change to speed up or slow down */
+    animation-iteration-count: infinite;  /* Never stop waving :) */
+    transform-origin: 70% 70%;       /* Pivot around the bottom-left palm */
+    display: inline-block;
+  }
+  
+  @keyframes wave-animation {
+      0% { transform: rotate( 0.0deg) }
+     10% { transform: rotate(14.0deg) }  /* The following five values can be played with to make the waving more or less extreme */
+     20% { transform: rotate(-8.0deg) }
+     30% { transform: rotate(14.0deg) }
+     40% { transform: rotate(-4.0deg) }
+     50% { transform: rotate(10.0deg) }
+     60% { transform: rotate( 0.0deg) }  /* Reset for the last half to pause */
+    100% { transform: rotate( 0.0deg) }
+  }
+  
+  /* body { font-size: 3.5em } */
+  video::-webkit-media-controls-panel {
+    display: none !important;
+    opacity: 1 !important;}
+
+video {
+    height: 100%;
+    width: 100%;
+    margin: 0px;
+    padding: 0% !important;
+    position: relative;
+    top: -40px ;
+}
+
+#controls,#incoming-call-controls{
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform:translateX(-50%);
+    display: flex;
+    gap: 1em;
+}
+
+
+.control-container{
+  background-color: rgb(179, 102, 249, .9);
+  padding: 20px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+#intro{
+    z-index: 5;
+    position: relative;
+    top:10px;
+    background-color: #d8d3d3bb;
+    border-radius: 7px;
+    width: fit-content;
+    margin: 5px;
+}
+
+img {
+    height: 2rem;
+    width: 2rem;
+}
+
+.smallFrame{
+    position: fixed;
+    top: 20px;
+    right: 15px;
+    height: 170px;
+    width: 300px;
+    border-radius: 5px;
+    border:2px solid #b366f9;
+    -webkit-box-shadow: 3px 3px 15px -1px rgba(0,0,0,0.77);
+    box-shadow: 3px 3px 15px -1px rgba(0,0,0,0.77);
+    z-index: 999;
+}
+
+.user{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  direction: ltr;
+  text-align: center;
+}

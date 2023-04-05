@@ -1,9 +1,12 @@
 
 let localStream;
 let remoteStream;
+let users = {}
 
 let peerConnection;
-let client = io("http://localhost:3000")
+let client = io("http://localhost:3000",{ transports: ["websocket"] })
+document.getElementById('incoming-call').style.display='none'
+
 
 const servers = {   
     iceServers:[
@@ -28,7 +31,7 @@ let createPeerConnection = async (MemberId) => {
     document.getElementById('user-2').srcObject = remoteStream
     document.getElementById('user-2').style.display = 'block'
 
-    // document.getElementById('user-1').classList.add('smallFrame')
+    document.getElementById('user-1').classList.add('smallFrame')
 
 
     if(!localStream){
@@ -98,16 +101,76 @@ client.on('candidate',(data)=>{
         peerConnection.addIceCandidate(data.candidate)
     }
 })
+client.emit('get-users')
+client.on('users',(data)=>{
+    console.log('users')
+    console.log(data)
+    users = data
+    userList()
+})
+
+client.on('incoming-call',(id)=>{
+    console.log('incoming call from ', id)
+    let ac = document.getElementById('incoming-call')
+    ac.style.display=''
+    document.getElementById('incoming-call-details').innerText="Call From "+users[id].name;
+    console.log(ac.style)
+    
+})
+
 
 let init = async () => {
 
-    client.on("connect", createOffer);
+    // client.on("connect", createOffer);
 
     localStream = await navigator.mediaDevices.getUserMedia(constraints)
     document.getElementById('user-1').srcObject = localStream
 }
 
 window.onload = ()=>{
+    console.log('on load called')
     let person = prompt("Please enter your name");
+    if(person){
+        document.getElementById('name').textContent += " "+person
+        client.emit('user-data',{name:person})
+    }
 }
-// init()
+// alert(window.onload)
+
+function call(event){
+    console.log(event.target.id)
+    client.emit('call',event.target.id)
+}
+
+function userList(){
+    let UserListElem = document.querySelector('#users-list')
+    UserListElem.replaceChildren()
+    console.log(UserListElem,users)
+    Object.keys(users).forEach(k => {
+        // users[k]
+        console.log('in for loop')
+        if(users[k]?.name){
+            let li = document.createElement('li')
+            let div = document.createElement('div')
+            div.classList.add('user')
+
+            li.appendChild(div)
+            UserListElem.appendChild(li)
+
+            let text = document.createElement('div')
+            text.innerText=client.id === k ?users[k].name + " (you)" :  users[k].name
+            
+            let img = document.createElement('img')
+            img.id = k
+            img.src = "/assets/icons/conference.png"
+            img.onclick =call
+            // img.classList.add('user')
+
+            div.appendChild(text)
+            div.appendChild(img)
+            // div.classList.add('.user')
+            console.log(div)
+        }
+    })
+}
+init()
