@@ -15,11 +15,14 @@ io.on("connection", (socket) => {
     })
 
     socket.on('offer', (data) => {
-      socket.broadcast.emit('offer', data)
+      // socket.broadcast.emit('offer', data)
+      data.sender=socket.id
+      io.to(data.member).emit('offer',data)
     })
 
     socket.on('answer', (data) => {
-      socket.broadcast.emit('answer', data)
+      // socket.broadcast.emit('answer', data)
+      io.to(data.receiver).emit('answer',data)
     })
 
     socket.on('candidate', (data) => {

@@ -2,10 +2,12 @@
 let localStream;
 let remoteStream;
 let users = {}
-
+let remoteUserSocketId;
 let peerConnection;
-let client = io("http://localhost:3000",{ transports: ["websocket"] })
+let client = io("http://192.168.218.177:3000",{ transports: ["websocket"] })
 document.getElementById('incoming-call').style.display='none'
+let PickCallBtn = document.getElementById('pick-call');
+
 
 
 const servers = {   
@@ -35,6 +37,8 @@ let createPeerConnection = async (MemberId) => {
 
 
     if(!localStream){
+        console.log('navigator ----')
+        console.log(navigator)
         localStream = await navigator.mediaDevices.getUserMedia({video:true, audio:false})
         document.getElementById('user-1').srcObject = localStream
     }
@@ -65,11 +69,11 @@ let createOffer = async (MemberId) => {
     let offer = await peerConnection.createOffer()
     await peerConnection.setLocalDescription(offer)
 
-    client.emit('offer', {'offer':offer})
+    client.emit('offer', {'offer':offer,member:MemberId})
 }
 
 let createAnswer = async (data) => {
-    console.log("offer received",data.offer)
+    console.log("offer received",data)
     await createPeerConnection()
 
     await peerConnection.setRemoteDescription(data.offer)
@@ -77,7 +81,7 @@ let createAnswer = async (data) => {
     let answer = await peerConnection.createAnswer()
     await peerConnection.setLocalDescription(answer)
 
-    client.emit('answer', {'answer':answer})
+    client.emit('answer', {'answer':answer,receiver:data.sender})
 }
 
 let addAnswer = async (data) => {
@@ -115,17 +119,28 @@ client.on('incoming-call',(id)=>{
     ac.style.display=''
     document.getElementById('incoming-call-details').innerText="Call From "+users[id].name;
     console.log(ac.style)
+    remoteUserSocketId=id;
     
 })
 
 
-let init = async () => {
+let init = async (callerId) => {
 
     // client.on("connect", createOffer);
-
+    createOffer(callerId)
+    console.log(navigator)
     localStream = await navigator.mediaDevices.getUserMedia(constraints)
     document.getElementById('user-1').srcObject = localStream
 }
+
+
+PickCallBtn.onclick = (event)=>{
+    console.log(event.target)
+    if(remoteUserSocketId){
+        init(remoteUserSocketId);
+    }
+}
+
 
 window.onload = ()=>{
     console.log('on load called')
@@ -173,4 +188,4 @@ function userList(){
         }
     })
 }
-init()
+// init()
