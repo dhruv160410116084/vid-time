@@ -4,7 +4,7 @@ let remoteStream;
 let users = {}
 let remoteUserSocketId;
 let peerConnection;
-let client = io("http://192.168.218.177:3000", { transports: ["websocket"] })
+let client = io("vid-time.vercel.app:3000", { transports: ["websocket"] })
 document.getElementById('incoming-call').style.display = 'none'
 let PickCallBtn = document.getElementById('pick-call');
 let DenyCallBtn = document.getElementById('deny-call')
