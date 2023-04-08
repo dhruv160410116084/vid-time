@@ -1,7 +1,16 @@
 
-const io = require("socket.io")();
+const express = require('express');
+const app = express();
+const http = require('http');
+const path = require('path');
+const server = http.createServer(app);
+const { Server } = require("socket.io");
+const io = new Server(server);
 
 let users = {}
+app.use('/', express.static(path.join(__dirname, '/../front-end/')))
+
+
 
 io.on("connection", (socket) => {
 
@@ -59,5 +68,8 @@ io.on("connection", (socket) => {
   }
 });
 
-io.listen(3000);
-console.log('server is running ')
+// io.listen(3000);
+// console.log('server is running ')
+server.listen(3000, () => {
+  console.log('listening on *:3000');
+});
