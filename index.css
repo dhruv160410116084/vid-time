@@ -91,7 +91,7 @@ video {
     top: -40px ;
 }
 
-#controls,#incoming-call-controls{
+#controls,#incoming-call-controls,#outgoing-call-controls{
     position: fixed;
     bottom: 20px;
     left: 50%;

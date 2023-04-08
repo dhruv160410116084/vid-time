@@ -44,6 +44,16 @@ io.on("connection", (socket) => {
       console.log('call...',id)
       io.to(id).emit('incoming-call',socket.id)
     })
+
+    socket.on('deny-call',(data)=>{
+      console.log('deny-call',data,socket.id)
+      io.to(data.member).emit('deny-call',data)
+    })
+
+    socket.on('webrtc-connected',(data)=>{
+      console.log('webrtc-connected',data,socket.id)
+      io.to(data.member).emit('webtrc-connected',{member:socket.id})
+    })
   } catch (error) {
     console.log(error)
   }

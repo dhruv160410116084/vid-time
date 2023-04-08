@@ -28,17 +28,26 @@
             <div class="pulse"> <i class="fas fa-phone fa-2x"></i> </div>
             <div id="incoming-call-details"></div>
         </div>
+        <div class="content-center" id="outgoing-call" style="display: none;">
+            <div class="pulse"> <i class="fas fa-phone fa-2x"></i> </div>
+            <div id="outgoing-call-details"></div>
+        </div>
         <video id="user-1" autoplay playsinline ></video>
         <video id="user-2"  autoplay playsinline hidden style="display: none;"></video>
-        <div id="incoming-call-controls">
+        <div id="incoming-call-controls" style="display: none;">
            
             <img src="./assets/icons/phone.png"class="control-container" id="pick-call" style="background-color: green;"/>
             <img src="assets/icons/phone.png" class="control-container" id="deny-call" style="background-color: red; transform: rotate(116deg);"/>
         </div>
+        <div id="outgoing-call-controls" style="display: none;">
+           
+            <!-- <img src="./assets/icons/phone.png"class="control-container" id="pick-call" style="background-color: green;"/> -->
+            <img src="assets/icons/phone.png" class="control-container" id="cancel-call" style="background-color: red; transform: rotate(116deg);"/>
+        </div>
         <div id="controls" style="display: none;">
-            <img src="./assets/icons/camera.png" class="control-container"></img>
-            <img src="./assets/icons/mic.png"class="control-container"/>
-            <img src="assets/icons/phone.png" class="control-container" style="background-color: red;"/>
+            <img src="./assets/icons/camera.png"  id="camera-btn" class="control-container"></img>
+            <img src="./assets/icons/mic.png" id="mic-btn" class="control-container"/>
+            <img src="assets/icons/phone.png" class="control-container" style="background-color: red;"  id="close-call"/>
         </div>
        
     </div>
