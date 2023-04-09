@@ -6,7 +6,7 @@
     An Awesome Free Video Calling webapp based on WebRTC & Socket.io
     <br/>
     <br/>
-    <a href="https://github.com/dhruv160410116084/vid-time">View Demo</a>
+    <a href="https://vid-time.onrender.com">View Demo</a>
     .
     <a href="https://github.com/dhruv160410116084/vid-time/issues">Request Feature</a>
   </p>
