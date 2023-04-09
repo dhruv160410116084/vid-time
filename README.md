@@ -25,8 +25,9 @@
 
 
 ## About The Project
-
-![Screen Shot](images/screenshot.png)
+![demo1](screen-shots/Screenshot%202023-04-09%20at%202.36.50%20PM.png)
+![demo2](screen-shots/Screenshot%202023-04-09%20at%202.37.00%20PM.png)
+![demo3](screen-shots/Screenshot%202023-04-09%20at%204.09.49%20PM.png)
 
 This is simple one-to-one video calling app using WebRTC technology.
 
