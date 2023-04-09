@@ -39,8 +39,8 @@ let createPeerConnection = async (MemberId) => {
 
 
     if (!localStream) {
-        console.log('navigator ----')
-        console.log(navigator)
+        //console.log('navigator ----')
+        //console.log(navigator)
         localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false })
         document.getElementById('user-1').srcObject = localStream
     }
@@ -50,22 +50,29 @@ let createPeerConnection = async (MemberId) => {
     })
 
     peerConnection.ontrack = (event) => {
-        console.log("on remote track", event)
+        //console.log("on remote track", event)
         event.streams[0].getTracks().forEach((track) => {
             remoteStream.addTrack(track)
         })
     }
 
     peerConnection.onicecandidate = async (event) => {
-        console.log('gen icecandidate', event)
+        //console.log('gen icecandidate', event)
         if (event.candidate) {
             client.emit('candidate', { 'candidate': event.candidate })
+        }
+    }
+    peerConnection.oniceconnectionstatechange = function() {
+        //console.log(peerConnection.iceConnectionState)
+        if(peerConnection.iceConnectionState == 'disconnected') {
+            //console.log('Disconnected');
+            CloseRTCConnection()
         }
     }
 }
 
 let createOffer = async (MemberId) => {
-    console.log('create offer called')
+    //console.log('create offer called')
     await createPeerConnection()
 
     let offer = await peerConnection.createOffer()
@@ -75,7 +82,7 @@ let createOffer = async (MemberId) => {
 }
 
 let createAnswer = async (data) => {
-    console.log("offer received", data)
+    //console.log("offer received", data)
     await createPeerConnection()
 
     await peerConnection.setRemoteDescription(data.offer)
@@ -87,11 +94,11 @@ let createAnswer = async (data) => {
 }
 
 let addAnswer = async (data) => {
-    console.log('ans received', data.answer)
+    //console.log('ans received', data.answer)
     if (!peerConnection.currentRemoteDescription) {
         peerConnection.setRemoteDescription(data.answer)
     }
-    console.log('connected')
+    //console.log('connected')
     document.getElementById('controls').style.display=''
     document.getElementById('outgoing-call-controls').style.display = 'none'
     document.getElementById('incoming-call-controls').style.display = 'none'
@@ -109,25 +116,25 @@ let leaveChannel = async () => {
 client.on('offer', createAnswer)
 client.on('answer', addAnswer)
 client.on('candidate', (data) => {
-    console.log('candidate', data)
+    //console.log('candidate', data)
 
     if (peerConnection) {
         peerConnection.addIceCandidate(data.candidate)
     }
 peerConnection.onclose = () => {
-        console.log("datachannel close");
+        //console.log("datachannel close");
       };
 })
 client.emit('get-users')
 client.on('users', (data) => {
-    console.log('users')
-    console.log(data)
+    //console.log('users')
+    //console.log(data)
     users = data
     userList()
 })
 
 client.on('webtrc-connected',(data)=>{
-    console.log('webrtc-connected',data)
+    //console.log('webrtc-connected',data)
     if(data.member){
         document.getElementById('controls').style.display=''
         document.getElementById('outgoing-call-controls').style.display = 'none'
@@ -141,17 +148,17 @@ client.on('webtrc-connected',(data)=>{
 
 client.on('incoming-call', (id) => {
     document.getElementById('incoming-call-controls').style.display = ''
-    console.log('incoming call from ', id)
+    //console.log('incoming call from ', id)
     let ac = document.getElementById('incoming-call')
     ac.style.display = ''
     document.getElementById('incoming-call-details').innerText = "Call From " + users[id].name;
-    console.log(ac.style)
+    //console.log(ac.style)
     remoteUserSocketId = id;
 
 })
 
 client.on('deny-call',(data)=>{
-    console.log('deny-call added')
+    //console.log('deny-call added')
     document.getElementById('incoming-call-controls').style.display = 'none'
     document.getElementById('incoming-call').style.display='none'
     document.getElementById('outgoing-call-controls').style.display = 'none'
@@ -175,41 +182,65 @@ let init = async (callerId) => {
 
     // client.on("connect", createOffer);
     createOffer(callerId)
-    console.log(navigator)
+    //console.log(navigator)
     localStream = await navigator.mediaDevices.getUserMedia(constraints)
     document.getElementById('user-1').srcObject = localStream
 }
 
 
 PickCallBtn.onclick = (event) => {
-    console.log(event.target)
+    //console.log(event.target)
     if (remoteUserSocketId) {
         init(remoteUserSocketId);
     }
 }
 
 DenyCallBtn.onclick = (event) => {
-    console.log('in deny call')
+    //console.log('in deny call')
     document.getElementById('incoming-call').style.display = 'none'
     document.getElementById('incoming-call-controls').style.display = 'none'
     client.emit('deny-call',{member:remoteUserSocketId})
 }
 
 CancelCallBtn.onclick = (event) =>{
-    console.log('in cancel call')
+    //console.log('in cancel call')
     client.emit('deny-call',{member:remoteUserSocketId,self:true})
     document.getElementById('outgoing-call').style.display='none'
     document.getElementById('outgoing-call-controls').style.display = 'none'
 
 }
 
-CloseRTCallBtn.onclick = (event) => {
-    console.log('close rtc call called')
+
+function CloseRTCConnection(){
+    //console.log('close rtc call called')
+    document.getElementById('controls').style.display='none'
+    //console.log(localStream.getTracks())
+    let videoTrack = localStream.getTracks().find(track => track.kind === 'video')
+    videoTrack.enabled = false
+
+    let audioTrack = localStream.getTracks().find(track => track.kind === 'audio')
+    if(audioTrack){
+        audioTrack.enabled = false
+
+    }
+   localStream.getTracks().forEach((track) => {
+        // peerConnection.addTrack(track, localStream)
+        track.stop()
+    })
+    remoteStream?.getTracks().forEach(track => {
+        track.stop()
+    })
     peerConnection.close()
+
+    document.getElementById('user-2').style.display='none';
+    alert('Call Ended')
+    document.getElementById('user-1').style.display='none';
+    remoteStream=null;
 }
+CloseRTCallBtn.onclick = CloseRTCConnection
 
 window.onload = () => {
-    console.log('on load called')
+    //console.log('on load called')
     let person = prompt("Please enter your name");
     if (person) {
         document.getElementById('name').textContent += " " + person
@@ -219,7 +250,7 @@ window.onload = () => {
 // alert(window.onload)
 
 function call(event) {
-    console.log(event.target.id)
+    //console.log(event.target.id)
     client.emit('call', event.target.id)
     remoteUserSocketId=event.target.id
     document.getElementById('outgoing-call').style.display=''
@@ -230,10 +261,10 @@ function call(event) {
 function userList() {
     let UserListElem = document.querySelector('#users-list')
     UserListElem.replaceChildren()
-    console.log(UserListElem, users)
+    //console.log(UserListElem, users)
     Object.keys(users).forEach(k => {
         // users[k]
-        console.log('in for loop')
+        //console.log('in for loop')
         if (users[k]?.name) {
             let li = document.createElement('li')
             let div = document.createElement('div')
@@ -258,7 +289,7 @@ function userList() {
             // img.classList.add('user')
 
             // div.classList.add('.user')
-            console.log(div)
+            //console.log(div)
         }
     })
 }
