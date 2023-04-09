@@ -25,9 +25,9 @@
     font-size: 16px;
     color: #dfc270;
     display: block;
-    width: 80%;
-    margin: auto;
-    padding: 10px 0px;
+    /* width: 80%; */
+    /* margin: auto; */
+    padding: 10px;
     border-bottom:1px solid #928f8f;
     cursor: pointer;
   }
@@ -94,7 +94,7 @@ video {
 #controls,#incoming-call-controls,#outgoing-call-controls{
     position: fixed;
     bottom: 20px;
-    left: 50%;
+    left: 57%;
     transform:translateX(-50%);
     display: flex;
     gap: 1em;

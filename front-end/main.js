@@ -4,7 +4,7 @@ let remoteStream;
 let users = {}
 let remoteUserSocketId;
 let peerConnection;
-let client = io("vid-time.onrender.com", { transports: ["websocket"] })
+let client = io("/", { transports: ["websocket"] })
 document.getElementById('incoming-call').style.display = 'none'
 let PickCallBtn = document.getElementById('pick-call');
 let DenyCallBtn = document.getElementById('deny-call')
@@ -134,6 +134,7 @@ client.on('webtrc-connected',(data)=>{
         document.getElementById('incoming-call-controls').style.display = 'none'
         document.getElementById('incoming-call').style.display='none'
         document.getElementById('outgoing-call').style.display='none'
+        document.getElementById('intro').style.display='none'
 
     }
 })
@@ -153,6 +154,10 @@ client.on('deny-call',(data)=>{
     console.log('deny-call added')
     document.getElementById('incoming-call-controls').style.display = 'none'
     document.getElementById('incoming-call').style.display='none'
+    document.getElementById('outgoing-call-controls').style.display = 'none'
+    document.getElementById('outgoing-call').style.display = 'none'
+    document.getElementById('intro').style.display=''
+
     if(data.self){
         alert('Missed Called From '+ users[data.member].name)
 
@@ -239,15 +244,19 @@ function userList() {
 
             let text = document.createElement('div')
             text.innerText = client.id === k ? users[k].name + " (you)" : users[k].name
+            div.appendChild(text)
 
-            let img = document.createElement('img')
-            img.id = k
-            img.src = "/assets/icons/conference.png"
-            img.onclick = call
+            if(client.id !== k){
+                let img = document.createElement('img')
+                img.id = k
+                img.src = "/assets/icons/conference.png"
+                img.onclick = call
+                div.appendChild(img)
+            }
+         
+
             // img.classList.add('user')
 
-            div.appendChild(text)
-            div.appendChild(img)
             // div.classList.add('.user')
             console.log(div)
         }
