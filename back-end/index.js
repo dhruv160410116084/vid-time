@@ -10,7 +10,9 @@ const io = new Server(server);
 let users = {}
 app.use('/', express.static(path.join(__dirname, '/../front-end/')))
 
-
+app.get('/vid-time',(req,res)=>{
+  res.send({success:true,message:'I am UP!'})
+})
 
 io.on("connection", (socket) => {
 
