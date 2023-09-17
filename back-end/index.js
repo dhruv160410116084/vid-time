@@ -5,12 +5,14 @@ const http = require('http');
 const path = require('path');
 const server = http.createServer(app);
 const { Server } = require("socket.io");
-const io = new Server(server);
+const io = new Server({
+  path: "/vid-time/"
+});
 
 let users = {}
 app.use('/', express.static(path.join(__dirname, '/../front-end/')))
 
-app.get('/vid-time',(req,res)=>{
+app.get('/vid-time-test',(req,res)=>{
   res.send({success:true,message:'I am UP!'})
 })
 

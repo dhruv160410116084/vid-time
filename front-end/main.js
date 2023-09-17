@@ -4,7 +4,7 @@ let remoteStream;
 let users = {}
 let remoteUserSocketId;
 let peerConnection;
-let client = io("wss://stage.thepowerportal.co.uk", { transports: ["websocket"] , path:'/vid-time' })
+let client = io("wss://stage.thepowerportal.co.uk", { transports: ["websocket"] , path:'/vid-time/' })
 document.getElementById('incoming-call').style.display = 'none'
 let PickCallBtn = document.getElementById('pick-call');
 let DenyCallBtn = document.getElementById('deny-call')
