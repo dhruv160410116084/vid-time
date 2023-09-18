@@ -4,17 +4,19 @@ const app = express();
 const http = require('http');
 const path = require('path');
 const server = http.createServer(app);
-const { Server } = require("socket.io");
-const io = new Server({
+
+const { Server } =  require("socket.io");
+// console.log('hello')
+const io = new Server(server ,{
   path: "/vid-time/"
 });
 
 let users = {}
-app.use('/', express.static(path.join(__dirname, '/../front-end/')))
+// app.use('/', express.static(path.join(__dirname, '/../front-end/')))
 
-app.get('/vid-time-test',(req,res)=>{
-  res.send({success:true,message:'I am UP!'})
-})
+// app.get('/vid-time',(req,res)=>{
+//   res.send({success:true,message:'I am UP!'})
+// })
 
 io.on("connection", (socket) => {
 
