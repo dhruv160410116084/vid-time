@@ -5,13 +5,16 @@ let users = {}
 let remoteUserSocketId;
 let peerConnection;
 let client = io("wss://stage.thepowerportal.co.uk", { transports: ["websocket"] , path:'/vid-time/' })
+// let client = io("ws://localhost:3000", { transports: ["websocket"] , path:'/vid-time/' })
+// let client = io("ws://10.0.0.251:3000", { transports: ["websocket"] , path:'/vid-time/' })
+
 document.getElementById('incoming-call').style.display = 'none'
 let PickCallBtn = document.getElementById('pick-call');
 let DenyCallBtn = document.getElementById('deny-call')
 let CancelCallBtn = document.getElementById('cancel-call')
 let CloseRTCallBtn = document.getElementById('close-call')
 
-
+// debugger
 const servers = {
     iceServers: [
         {
@@ -29,7 +32,7 @@ let constraints = {
 }
 
 let createPeerConnection = async (MemberId) => {
-    peerConnection = new RTCPeerConnection(servers)
+    peerConnection = new RTCPeerConnection(servers)  // creating a peerconnection form iceservers (STUN)
 
     remoteStream = new MediaStream()
     document.getElementById('user-2').srcObject = remoteStream
@@ -38,35 +41,41 @@ let createPeerConnection = async (MemberId) => {
     document.getElementById('user-1').classList.add('smallFrame')
 
 
-    if (!localStream) {
-        //console.log('navigator ----')
-        //console.log(navigator)
+    if (!localStream) {  // create local stream if not exists
+        console.log('navigator ----')
+        console.log(navigator)
         localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false })
+        console.log(localStream)
         document.getElementById('user-1').srcObject = localStream
     }
 
-    localStream.getTracks().forEach((track) => {
+    localStream.getTracks().forEach((track) => { //adding tracks of local stream to peerconnection
         peerConnection.addTrack(track, localStream)
     })
 
     peerConnection.ontrack = (event) => {
-        //console.log("on remote track", event)
+        console.log("on remote track", event)
         event.streams[0].getTracks().forEach((track) => {
             remoteStream.addTrack(track)
         })
     }
 
     peerConnection.onicecandidate = async (event) => {
-        //console.log('gen icecandidate', event)
+        console.log('gen icecandidate', event)
         if (event.candidate) {
             client.emit('candidate', { 'candidate': event.candidate })
         }
     }
     peerConnection.oniceconnectionstatechange = function() {
-        //console.log(peerConnection.iceConnectionState)
+        console.log(peerConnection.iceConnectionState)
+
         if(peerConnection.iceConnectionState == 'disconnected') {
-            //console.log('Disconnected');
+            console.log('Disconnected');
             CloseRTCConnection()
+        }
+        if(peerConnection.iceConnectionState == 'connected') {
+            console.log('connected');
+            // CloseRTCConnection()
         }
     }
 }
@@ -76,19 +85,19 @@ let createOffer = async (MemberId) => {
     await createPeerConnection()
 
     let offer = await peerConnection.createOffer()
-    await peerConnection.setLocalDescription(offer)
+    await peerConnection.setLocalDescription(new RTCSessionDescription(offer))
 
     client.emit('offer', { 'offer': offer, member: MemberId })
 }
 
 let createAnswer = async (data) => {
-    //console.log("offer received", data)
+    console.log("offer received", data)
     await createPeerConnection()
 
     await peerConnection.setRemoteDescription(data.offer)
 
     let answer = await peerConnection.createAnswer()
-    await peerConnection.setLocalDescription(answer)
+    await peerConnection.setLocalDescription( new RTCSessionDescription(answer))
 
     client.emit('answer', { 'answer': answer, receiver: data.sender })
 }
@@ -119,6 +128,10 @@ client.on('candidate', (data) => {
     //console.log('candidate', data)
 
     if (peerConnection) {
+        // console.log(data)
+    console.log('candidate', data)
+
+        if(data.candidate)
         peerConnection.addIceCandidate(data.candidate)
     }
 peerConnection.onclose = () => {

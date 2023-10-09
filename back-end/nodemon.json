@@ -1,0 +1,4 @@
+{
+    "exec": "cross-env NODE_ENV=staging node index.js"
+  }
+  
