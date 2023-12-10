@@ -12,7 +12,7 @@ const io = new Server(server ,{
 });
 
 let users = {}
-// app.use('/', express.static(path.join(__dirname, '/../front-end/')))
+app.use('/', express.static(path.join(__dirname, '/../front-end/')))
 
 // app.get('/vid-time',(req,res)=>{
 //   res.send({success:true,message:'I am UP!'})
@@ -76,6 +76,6 @@ io.on("connection", (socket) => {
 
 // io.listen(3000);
 // console.log('server is running ')
-server.listen(3000, () => {
+server.listen(3000,"10.0.0.251", () => {
   console.log('listening on *:3000');
 });

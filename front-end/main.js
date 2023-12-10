@@ -7,14 +7,12 @@ let peerConnection;
 let client = io("wss://stage.thepowerportal.co.uk", { transports: ["websocket"] , path:'/vid-time/' })
 // let client = io("ws://localhost:3000", { transports: ["websocket"] , path:'/vid-time/' })
 // let client = io("ws://10.0.0.251:3000", { transports: ["websocket"] , path:'/vid-time/' })
-
 document.getElementById('incoming-call').style.display = 'none'
 let PickCallBtn = document.getElementById('pick-call');
 let DenyCallBtn = document.getElementById('deny-call')
 let CancelCallBtn = document.getElementById('cancel-call')
 let CloseRTCallBtn = document.getElementById('close-call')
 
-// debugger
 const servers = {
     iceServers: [
         {
@@ -44,8 +42,8 @@ let createPeerConnection = async (MemberId) => {
     if (!localStream) {  // create local stream if not exists
         console.log('navigator ----')
         console.log(navigator)
-        localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false })
-        console.log(localStream)
+        localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true })
+        console.log(localStream,'--------------localstream')
         document.getElementById('user-1').srcObject = localStream
     }
 
@@ -81,7 +79,7 @@ let createPeerConnection = async (MemberId) => {
 }
 
 let createOffer = async (MemberId) => {
-    //console.log('create offer called')
+    console.log('create offer called')
     await createPeerConnection()
 
     let offer = await peerConnection.createOffer()
@@ -130,8 +128,8 @@ client.on('candidate', (data) => {
     if (peerConnection) {
         // console.log(data)
     console.log('candidate', data)
-
-        if(data.candidate)
+            
+        if(data.candidate.length > 0)
         peerConnection.addIceCandidate(data.candidate)
     }
 peerConnection.onclose = () => {
