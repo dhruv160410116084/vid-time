@@ -12,13 +12,11 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
-      
-
-             
+        
       - name: Super-Linter
         uses: super-linter/super-linter@v5.7.2
         with:
-          auto_fix: true
+          auto_fix: entryPoint
 
         env:
           RUN_LOCAL: true
