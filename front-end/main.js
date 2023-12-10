@@ -59,7 +59,7 @@ let createPeerConnection = async (MemberId) => {
     }
 
     peerConnection.onicecandidate = async (event) => {
-        console.log('gen icecandidate', event)
+                                console.log("gen icecandidate", event)
         if (event.candidate) {
             client.emit('candidate', { 'candidate': event.candidate })
         }
