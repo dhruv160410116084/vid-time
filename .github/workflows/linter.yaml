@@ -45,6 +45,9 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
+      - name: Add Lightsail host key to known hosts
+        run: ssh-keyscan -H your-lightsail-ip >> ~/.ssh/known_hosts    
+
       - name: Deploy to Lightsail
         run: |
-           ssh -i ~/.ssh/private.key openstack@15.157.4.6
+           ssh openstack@15.157.4.6
