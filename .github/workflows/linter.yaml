@@ -31,6 +31,7 @@ jobs:
         run: |
           # Use AWS CLI or other tools to deploy your Docker image to Lightsail
           # Example: aws lightsail push-container-image --service-name your-lightsail-service --label your-image-name
+          aws --version
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
