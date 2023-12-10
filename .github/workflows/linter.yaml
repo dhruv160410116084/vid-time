@@ -47,4 +47,4 @@ jobs:
 
       - name: Deploy to Lightsail
         run: |
-          ssh openstack@15.157.4.6 'echo "hello how are you from lighsail--------------" '
+           ssh -i ~/.ssh/private.key openstack@15.157.4.6
