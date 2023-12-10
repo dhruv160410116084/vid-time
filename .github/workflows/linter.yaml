@@ -27,12 +27,11 @@ jobs:
     needs: docker_hub_push
 
     steps:
-      - name: Deploy to AWS Lightsail
-        run: |
-          # Use AWS CLI or other tools to deploy your Docker image to Lightsail
-          # Example: aws lightsail push-container-image --service-name your-lightsail-service --label your-image-name
-          aws --version
-          aws lightsail push-container-image --service-name openstack --label vid-time --image dhruv898002/vid-time:latest
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      - name: SSH Agent Action
+        uses: truemark/ssh-agent-action@v1
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+       - name: Deploy to Lightsail
+         run: |
+          ssh openstack@15.157.4.6 'echo "hello how are you from lighsail--------------" '
