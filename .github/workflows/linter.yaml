@@ -53,7 +53,8 @@ jobs:
           ssh-keyscan -H  15.157.4.6 >> ~/.ssh/known_hosts
           cat ~/.ssh/known_hosts
           ls -al ~/
-          ls -al ~/.ssh
+          cd /home/runner/work/vid-time/vid-time/
+          ls -al .
           cat ~/private.key  
 
       - name: Deploy to Lightsail
