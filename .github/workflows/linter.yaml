@@ -60,4 +60,4 @@ jobs:
 
       - name: Deploy to Lightsail
         run: |
-           ssh openstack@15.157.4.6
+           ssh ubuntu@15.157.4.6
