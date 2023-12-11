@@ -80,7 +80,3 @@ server.listen(3000, () => {
   console.log('listening on *:3000');
 });
 
-function subtraction(a, b) {
-  return a - b;
-}
-module.exports = subtraction;

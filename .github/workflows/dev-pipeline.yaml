@@ -39,7 +39,7 @@ jobs:
         run: |
           cd back-end
           npm install 
-          npm test
+          npm run test
 
   docker_hub_push:
     runs-on: ubuntu-latest
