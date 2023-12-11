@@ -1,9 +1,8 @@
 name: CI/CD
 
 on:
-  push:
-    branches:
-      - dev
+  pull_request:
+    branches: [main]
 
 jobs:
   linting:
@@ -52,7 +51,7 @@ jobs:
      - name: executing remote ssh commands using password
        uses: appleboy/ssh-action@v1.0.0
        with:
-        host: 15.157.4.6
+        host: 15.157.146.40
         username: ubuntu
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         port: 22
