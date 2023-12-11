@@ -21,43 +21,55 @@ jobs:
           docker build -t dhruv898002/vid-time .
           docker push dhruv898002/vid-time
 
-  crate_ssh:
+  # crate_ssh:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Create SSH key
+  #       run: |
+  #         mkdir -p ~/.ssh/
+  #         echo "$SSH_PRIVATE_KEY" > ../private.key
+  #         sudo chmod 600 ../private.key
+  #         echo "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
+  #       shell: bash
+  #       env:
+  #         SSH_PRIVATE_KEY: ${{secrets.SSH_PRIVATE_KEY}}
+  #         SSH_KNOWN_HOSTS: ${{secrets.SSH_KNOWN_HOSTS}}
+
+  deploy_lightsail:
     runs-on: ubuntu-latest
     steps:
-      - name: Create SSH key
-        run: |
-          mkdir -p ~/.ssh/
-          echo "$SSH_PRIVATE_KEY" > ../private.key
-          sudo chmod 600 ../private.key
-          echo "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
-        shell: bash
-        env:
-          SSH_PRIVATE_KEY: ${{secrets.SSH_PRIVATE_KEY}}
-          SSH_KNOWN_HOSTS: ${{secrets.SSH_KNOWN_HOSTS}}
+     - name: executing remote ssh commands using password
+       uses: appleboy/ssh-action@v1.0.0
+       with:
+        host: 15.157.4.6
+        username: ubuntu
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        port: 22
+        script: whoami
 
-  deploy_to_lightsail:
-    runs-on: ubuntu-latest
+  # deploy_to_lightsail:
+  #   runs-on: ubuntu-latest
 
-    needs: docker_hub_push
+  #   needs: docker_hub_push
 
-    steps:
+  #   steps:
 
-      - name: Add Lightsail host key to known hosts
-        run: |
-          mkdir -p ~/.ssh/
-          pwd
-          echo "${{secrets.SSH_PRIVATE_KEY}}"
-          echo "${{secrets.SSH_PRIVATE_KEY}}" > ../private.key
-          pwd
-          sudo chmod 600 ../private.key
-          echo "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
-          ssh-keyscan -H  15.157.4.6 >> ~/.ssh/known_hosts
-          cd /home/runner/work/vid-time/
-          ls -al .
-          cat ./private.key 
-        env:
-          SSH_PRIVATE_KEY: ${{secrets.SSH_PRIVATE_KEY}}  
+  #     - name: Add Lightsail host key to known hosts
+  #       run: |
+  #         mkdir -p ~/.ssh/
+  #         pwd
+  #         echo "${{secrets.SSH_PRIVATE_KEY}}"
+  #         echo "${{secrets.SSH_PRIVATE_KEY}}" > ../private.key
+  #         pwd
+  #         sudo chmod 600 ../private.key
+  #         echo "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
+  #         ssh-keyscan -H  15.157.4.6 >> ~/.ssh/known_hosts
+  #         cd /home/runner/work/vid-time/
+  #         ls -al .
+  #         cat ./private.key 
+  #       env:
+  #         SSH_PRIVATE_KEY: ${{secrets.SSH_PRIVATE_KEY}}  
 
-      - name: Deploy to Lightsail
-        run: |
-           ssh ubuntu@15.157.4.6
+  #     - name: Deploy to Lightsail
+  #       run: |
+  #          ssh ubuntu@15.157.4.6
