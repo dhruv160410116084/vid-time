@@ -9,7 +9,7 @@ WORKDIR /app
 # Copy the current directory contents into the container at /app
 COPY . .
 
-RUN cd './back-end/'
+WORKDIR /app/back-end
 
 # Install app dependencies
 RUN npm install
@@ -21,4 +21,4 @@ EXPOSE 3000
 ENV NODE_ENV=staging
 
 # Run the application
-CMD ["node", "./back-end/index.js"]
+CMD ["node", "./index.js"]
