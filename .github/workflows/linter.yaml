@@ -41,13 +41,13 @@ jobs:
     needs: docker_hub_push
 
     steps:
-      - name: SSH Agent Action
-        uses: truemark/ssh-agent-action@v1
-        with:
-          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
       - name: Add Lightsail host key to known hosts
         run: |
+          mkdir -p ~/.ssh/
+          echo "$SSH_PRIVATE_KEY" > ../private.key
+          sudo chmod 600 ../private.key
+          echo "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
           ssh-keyscan -H  15.157.4.6 >> ~/.ssh/known_hosts
           cat ~/.ssh/known_hosts
           ls -al ~/
