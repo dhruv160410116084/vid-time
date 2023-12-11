@@ -1,4 +1,4 @@
-name: CI/CD
+name: prod CI/CD
 
 on:
   pull_request:
