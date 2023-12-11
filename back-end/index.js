@@ -5,9 +5,9 @@ const http = require('http');
 const path = require('path');
 const server = http.createServer(app);
 
-const { Server } =  require("socket.io");
+const { Server } = require("socket.io");
 // console.log('hello')
-const io = new Server(server ,{
+const io = new Server(server, {
   path: "/vid-time/"
 });
 
@@ -31,13 +31,13 @@ io.on("connection", (socket) => {
 
     socket.on('offer', (data) => {
       // socket.broadcast.emit('offer', data)
-      data.sender=socket.id
-      io.to(data.member).emit('offer',data)
+      data.sender = socket.id
+      io.to(data.member).emit('offer', data)
     })
 
     socket.on('answer', (data) => {
       // socket.broadcast.emit('answer', data)
-      io.to(data.receiver).emit('answer',data)
+      io.to(data.receiver).emit('answer', data)
     })
 
     socket.on('candidate', (data) => {
@@ -52,22 +52,22 @@ io.on("connection", (socket) => {
     socket.on("disconnect", (reason) => {
       // ...
       delete users[socket.id]
-      io.emit('users',users)
+      io.emit('users', users)
     });
 
-    socket.on('call',(id)=>{
-      console.log('call...',id)
-      io.to(id).emit('incoming-call',socket.id)
+    socket.on('call', (id) => {
+      console.log('call...', id)
+      io.to(id).emit('incoming-call', socket.id)
     })
 
-    socket.on('deny-call',(data)=>{
-      console.log('deny-call',data,socket.id)
-      io.to(data.member).emit('deny-call',data)
+    socket.on('deny-call', (data) => {
+      console.log('deny-call', data, socket.id)
+      io.to(data.member).emit('deny-call', data)
     })
 
-    socket.on('webrtc-connected',(data)=>{
-      console.log('webrtc-connected',data,socket.id)
-      io.to(data.member).emit('webtrc-connected',{member:socket.id})
+    socket.on('webrtc-connected', (data) => {
+      console.log('webrtc-connected', data, socket.id)
+      io.to(data.member).emit('webtrc-connected', { member: socket.id })
     })
   } catch (error) {
     console.log(error)
