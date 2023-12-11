@@ -51,6 +51,7 @@ jobs:
           ssh-keyscan -H  15.157.4.6 >> ~/.ssh/known_hosts
           cat ~/.ssh/known_hosts
           ls -al ~/
+          ls -al ~/.ssh
           cat ~/private.key  
 
       - name: Deploy to Lightsail
