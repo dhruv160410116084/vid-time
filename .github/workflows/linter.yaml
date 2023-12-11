@@ -46,14 +46,16 @@ jobs:
         run: |
           mkdir -p ~/.ssh/
           pwd
-          echo "${{secrets.SSH_PRIVATE_KEY"}} > ../private.key
+          echo "${{SSSSSH_PRIVATE_KEY"}} > ../private.key
           pwd
           sudo chmod 600 ../private.key
           echo "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
           ssh-keyscan -H  15.157.4.6 >> ~/.ssh/known_hosts
           cd /home/runner/work/vid-time/vid-time/
           ls -al .
-          cat ./private.key  
+          cat ./private.key 
+        env:
+          SSH_PRIVATE_KEY: ${{secrets.SSH_PRIVATE_KEY}}  
 
       - name: Deploy to Lightsail
         run: |
