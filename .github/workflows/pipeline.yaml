@@ -57,5 +57,5 @@ jobs:
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         port: 22
         script: |
-          ifconfig
+          sudo docker pull dhruv898002/vid-time:latest
           ls -al
