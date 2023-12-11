@@ -51,11 +51,9 @@ jobs:
           sudo chmod 600 ../private.key
           echo "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
           ssh-keyscan -H  15.157.4.6 >> ~/.ssh/known_hosts
-          cat ~/.ssh/known_hosts
-          ls -al ~/
           cd /home/runner/work/vid-time/vid-time/
           ls -al .
-          cat ~/private.key  
+          cat ./private.key  
 
       - name: Deploy to Lightsail
         run: |
