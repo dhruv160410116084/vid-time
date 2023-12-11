@@ -20,6 +20,7 @@ jobs:
         run: |
           docker build -t dhruv898002/vid-time .
           docker push dhruv898002/vid-time
+
   crate_ssh:
     runs-on: ubuntu-latest
     steps:
@@ -46,7 +47,10 @@ jobs:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
       - name: Add Lightsail host key to known hosts
-        run: ssh-keyscan -H  15.157.4.6 >> ~/.ssh/known_hosts    
+        run: |
+        ssh-keyscan -H  15.157.4.6 >> ~/.ssh/known_hosts
+        cat ~/.ssh/known_hosts
+        cat ~/private.key  
 
       - name: Deploy to Lightsail
         run: |
