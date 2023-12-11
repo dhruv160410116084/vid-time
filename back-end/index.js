@@ -76,6 +76,6 @@ io.on("connection", (socket) => {
 
 // io.listen(3000);
 // console.log('server is running ')
-server.listen(3000,"10.0.0.251", () => {
+server.listen(3000, () => {
   console.log('listening on *:3000');
 });
