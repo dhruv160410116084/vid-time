@@ -45,7 +45,7 @@ jobs:
         username: ubuntu
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         port: 22
-        script: ipconfig
+        script: ifconfig
 
   # deploy_to_lightsail:
   #   runs-on: ubuntu-latest
