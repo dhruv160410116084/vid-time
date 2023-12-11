@@ -48,9 +48,10 @@ jobs:
 
       - name: Add Lightsail host key to known hosts
         run: |
-        ssh-keyscan -H  15.157.4.6 >> ~/.ssh/known_hosts
-        cat ~/.ssh/known_hosts
-        cat ~/private.key  
+          ssh-keyscan -H  15.157.4.6 >> ~/.ssh/known_hosts
+          cat ~/.ssh/known_hosts
+          ls -al ~/
+          cat ~/private.key  
 
       - name: Deploy to Lightsail
         run: |
