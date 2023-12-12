@@ -11,12 +11,6 @@ jobs:
   linting:
     if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
-  
-    permissions:
-      contents: read
-      packages: read
-      statuses: write
-
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
@@ -25,14 +19,14 @@ jobs:
           # list of changed files within `super-linter`
           fetch-depth: 0
 
-        - name: Lint Code Base
-          uses: super-linter/super-linter@v5
-          env:
-            VALIDATE_ALL_CODEBASE: false
-            VALIDATE_JAVASCRIPT_ES: true
-            DEFAULT_BRANCH: main
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  
+      - name: Lint Code Base
+        uses: super-linter/super-linter@v5
+        env:
+          VALIDATE_ALL_CODEBASE: false
+          VALIDATE_JAVASCRIPT_ES: true
+          DEFAULT_BRANCH: main
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
   testing:
     runs-on: ubuntu-latest
     needs: linting
@@ -41,7 +35,7 @@ jobs:
       - name: Run Tests
         run: |
           cd back-end
-          npm install 
+          npm install
           npm run test
 
   docker_hub_push:
@@ -62,18 +56,17 @@ jobs:
   deploy_lightsail:
     runs-on: ubuntu-latest
     needs: docker_hub_push
-    
     steps:
-    - name: executing remote ssh commands using password
-      uses: appleboy/ssh-action@v1.0.0
-      with:
-        host: 15.157.146.40
-        username: ubuntu
-        key: ${{ secrets.SSH_PRIVATE_KEY }}
-        port: 22
-        script: |
-          docker stop $(docker ps -q)
-          docker rm $(docker ps -aq)
-          docker rmi $(docker images -q)
-          docker pull dhruv898002/vid-time:latest
-          docker run -d -p 80:3000 dhruv898002/vid-time
+      - name: executing remote ssh commands using password
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: 15.157.146.40
+          username: ubuntu
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: 22
+          script: |
+            docker stop $(docker ps -q)
+            docker rm $(docker ps -aq)
+            docker rmi $(docker images -q)
+            docker pull dhruv898002/vid-time:latest
+            docker run -d -p 80:3000 dhruv898002/vid-time
