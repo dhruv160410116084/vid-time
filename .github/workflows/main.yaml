@@ -1,15 +1,13 @@
 name: prod CI/CD
 
 on:
-  pull_request:
-    types:
-      - closed
+  push:
     branches:
       - main
 
+
 jobs:
   linting:
-    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
